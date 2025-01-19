@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type cliCommand struct {
@@ -61,4 +62,17 @@ func commandHelp() error {
 func commandExit() error {
 	os.Exit(0)
 	return nil
+}
+
+func cleanInput(text string) []string {
+	out := []string{}
+	trimmedText := strings.TrimRight(strings.TrimLeft(text, " "), " ")
+	words := strings.Split(trimmedText, " ")
+	for _, word := range words {
+		if word != " " && word != "" {
+			out = append(out, word)
+		}
+	}
+
+	return out
 }
