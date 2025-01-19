@@ -24,7 +24,7 @@ func main() {
 		input := scanner.Text()
 		command, ok := nameToCliCommand[input]
 		if !ok {
-			fmt.Printf("%s is not a valid command", input)
+			fmt.Print("Unknown command")
 			command = nameToCliCommand["help"]
 		}
 		err = command.callback()
@@ -50,7 +50,7 @@ func getCLICommandMap() map[string]cliCommand {
 }
 
 func commandHelp() error {
-	fmt.Print("\nWelcome to the Pokedex.\nUsage:\n\n")
+	fmt.Print("\nWelcome to the Pokedex!\nUsage:\n\n")
 	commandMap := getCLICommandMap()
 	for _, command := range commandMap {
 		fmt.Printf("%s: %s\n", command.name, command.description)
@@ -60,19 +60,13 @@ func commandHelp() error {
 }
 
 func commandExit() error {
+	fmt.Print("\nClosing the Pokedex... Goodbye!\n")
 	os.Exit(0)
 	return nil
 }
 
 func cleanInput(text string) []string {
-	out := []string{}
 	trimmedText := strings.TrimRight(strings.TrimLeft(text, " "), " ")
-	words := strings.Split(trimmedText, " ")
-	for _, word := range words {
-		if word != " " && word != "" {
-			out = append(out, word)
-		}
-	}
-
-	return out
+	words := strings.Fields(strings.ToLower(trimmedText))
+	return words
 }
