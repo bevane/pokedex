@@ -1,0 +1,2 @@
+## get location areas
+GET https://pokeapi.co/api/v2/location-area/
