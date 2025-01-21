@@ -40,3 +40,23 @@ func commandMap(config *config) error {
 	}
 	return nil
 }
+
+func commandMapB(config *config) error {
+	url := ""
+	if config.Previous == "" {
+		fmt.Println("you're on the first page")
+		return nil
+	} else {
+		url = config.Previous
+	}
+	locationAreas, err := api.GetLocations(url)
+	if err != nil {
+		return err
+	}
+	config.Next = locationAreas.Next
+	config.Previous = locationAreas.Previous
+	for _, result := range locationAreas.Results {
+		fmt.Println(result.Name)
+	}
+	return nil
+}
