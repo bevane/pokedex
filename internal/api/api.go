@@ -17,27 +17,23 @@ type LocationAreas struct {
 	} `json:"results"`
 }
 
-func getLocations(url string) ([]string, error) {
-	locationNames := []string{}
+func GetLocations(url string) (LocationAreas, error) {
+	locationAreas := LocationAreas{}
 	res, err := http.Get(url)
 	if err != nil {
-		return nil, err
+		return locationAreas, err
 	}
 	body, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
-		return nil, err
+		return locationAreas, err
 	}
 	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
+		return locationAreas, fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
 	}
-	locationAreas := LocationAreas{}
-	err = json.Unmarshal(body, locationAreas)
+	err = json.Unmarshal(body, &locationAreas)
 	if err != nil {
-		return nil, err
+		return locationAreas, err
 	}
-	for _, result := range locationAreas.Results {
-		locationNames = append(locationNames, result.Name)
-	}
-	return locationNames, nil
+	return locationAreas, nil
 }
