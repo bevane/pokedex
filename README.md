@@ -10,6 +10,7 @@ This project was completed as part of the [boot.dev](https://www.boot.dev) back-
 
 - Making HTTP requests in Go
 - Parsing JSON in Go
-- Unit Testing
+- Writing unit tests
 - Caching HTTP responses
+- Using Mutexes to safely store, retrieve and invalidate cache
 
