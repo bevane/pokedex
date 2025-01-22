@@ -25,7 +25,7 @@ func commandExit(config *config) error {
 func commandMap(config *config) error {
 	url := ""
 	if config.Next == "" {
-		url = "https://pokeapi.co/api/v2/location-area"
+		url = "https://pokeapi.co/api/v2/location-area?offset=0&limit=20"
 	} else {
 		url = config.Next
 	}
