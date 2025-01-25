@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func commandHelp(config *config) error {
+func commandHelp(config *config, args ...string) error {
 	fmt.Print("\nWelcome to the Pokedex!\nUsage:\n\n")
 	commandMap := getCLICommandMap()
 	for _, command := range commandMap {
@@ -16,13 +16,13 @@ func commandHelp(config *config) error {
 	return nil
 }
 
-func commandExit(config *config) error {
+func commandExit(config *config, args ...string) error {
 	fmt.Print("\nClosing the Pokedex... Goodbye!\n")
 	os.Exit(0)
 	return nil
 }
 
-func commandMap(config *config) error {
+func commandMap(config *config, args ...string) error {
 	url := ""
 	if config.Next == "" {
 		url = "https://pokeapi.co/api/v2/location-area?offset=0&limit=20"
@@ -41,7 +41,7 @@ func commandMap(config *config) error {
 	return nil
 }
 
-func commandMapB(config *config) error {
+func commandMapB(config *config, args ...string) error {
 	url := ""
 	if config.Previous == "" {
 		fmt.Println("you're on the first page")
@@ -57,6 +57,20 @@ func commandMapB(config *config) error {
 	config.Previous = locationAreas.Previous
 	for _, result := range locationAreas.Results {
 		fmt.Println(result.Name)
+	}
+	return nil
+}
+
+func commandExplore(config *config, args ...string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("explore command requires an argument")
+	}
+	locationAreaDetails, err := api.GetLocationDetails(args[0])
+	if err != nil {
+		return err
+	}
+	for _, encounter := range locationAreaDetails.PokemonEncounters {
+		fmt.Println(encounter.Pokemon.Name)
 	}
 	return nil
 }

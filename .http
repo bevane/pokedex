@@ -1,2 +1,5 @@
-## get location areas
+### get location areas
 GET https://pokeapi.co/api/v2/location-area/
+
+### get pokemons at location
+GET https://pokeapi.co/api/v2/location-area/pastoria-city-area/

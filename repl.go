@@ -10,7 +10,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 type config struct {
@@ -28,12 +28,13 @@ func startRepl() {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
 		input := scanner.Text()
-		command, ok := nameToCliCommand[input]
+		cleanedInput := cleanInput(input)
+		command, ok := nameToCliCommand[cleanedInput[0]]
 		if !ok {
 			fmt.Print("Unknown command")
 			command = nameToCliCommand["help"]
 		}
-		err = command.callback(locationConfig)
+		err = command.callback(locationConfig, cleanedInput[1:]...)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -61,6 +62,11 @@ func getCLICommandMap() map[string]cliCommand {
 			name:        "mapb",
 			description: "Display names of the previous 20 location areas",
 			callback:    commandMapB,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Display list of pokemon in an area",
+			callback:    commandExplore,
 		},
 	}
 }
