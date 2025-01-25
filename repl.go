@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/bevane/pokedex/internal/api"
 )
 
 type cliCommand struct {
@@ -17,6 +19,8 @@ type config struct {
 	Next     string
 	Previous string
 }
+
+var pokedex = make(map[string]api.Pokemon)
 
 func startRepl() {
 	locationConfig := &config{}
@@ -67,6 +71,11 @@ func getCLICommandMap() map[string]cliCommand {
 			name:        "explore",
 			description: "Display list of pokemon in an area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Catch and add a pokemon to Pokedex",
+			callback:    commandCatch,
 		},
 	}
 }
