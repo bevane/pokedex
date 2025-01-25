@@ -155,3 +155,16 @@ Types:
 	return nil
 
 }
+
+func commandPokedex(config *config, args ...string) error {
+	if len(pokedex) == 0 {
+		fmt.Println("Pokedex is empty")
+		return nil
+	}
+	pokemonList := "Your Pokedex:\n"
+	for _, pokemon := range pokedex {
+		pokemonList += fmt.Sprintf(" - %v\n", pokemon.Name)
+	}
+	fmt.Print(pokemonList)
+	return nil
+}
