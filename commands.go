@@ -66,7 +66,7 @@ func commandMapB(config *config, args ...string) error {
 
 func commandExplore(config *config, args ...string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("explore command requires an argument")
+		return fmt.Errorf("explore command requires an argument\n")
 	}
 	location := strings.ToLower(args[0])
 	locationAreaDetails, err := api.GetLocationDetails(location)
@@ -81,7 +81,7 @@ func commandExplore(config *config, args ...string) error {
 
 func commandCatch(config *config, args ...string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("explore command requires an argument")
+		return fmt.Errorf("catch command requires an argument\n")
 	}
 	pokemonName := strings.ToLower(args[0])
 	pokemon, err := api.GetPokemonDetails(pokemonName)
@@ -101,4 +101,57 @@ func commandCatch(config *config, args ...string) error {
 		fmt.Printf("Oh no! %v got away!\n", pokemonName)
 	}
 	return nil
+}
+
+func commandInspect(config *config, args ...string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("inspect command requires an argument\n")
+	}
+	pokemonName := strings.ToLower(args[0])
+	pokemon, ok := pokedex[pokemonName]
+	if !ok {
+		fmt.Printf("You have not caught %v yet\n", pokemonName)
+		return nil
+	}
+	var hp int
+	var attack int
+	var defense int
+	var specialAttack int
+	var specialDefense int
+	var speed int
+	var typesStr string
+	for _, stat := range pokemon.Stats {
+		switch stat.Stat.Name {
+		case "hp":
+			hp = stat.BaseStat
+		case "attack":
+			attack = stat.BaseStat
+		case "defense":
+			defense = stat.BaseStat
+		case "special-attack":
+			specialAttack = stat.BaseStat
+		case "special-defense":
+			specialDefense = stat.BaseStat
+		case "speed":
+			speed = stat.BaseStat
+		}
+	}
+	for _, pokemonType := range pokemon.Types {
+		typesStr += fmt.Sprintf(" - %v\n", pokemonType.Type.Name)
+	}
+
+	fmt.Printf(`Name: %v
+Height: %v
+Weight: %v
+Stats:
+  -hp: %v
+  -attack: %v
+  -defense: %v
+  -special-attack: %v
+  -special-defense: %v
+  -speed: %v
+Types:
+%v`, pokemon.Name, pokemon.Height, pokemon.Weight, hp, attack, defense, specialAttack, specialDefense, speed, typesStr)
+	return nil
+
 }
